@@ -3,295 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Pesan Testimoni (AI)</title>
-    
-    <!-- Impor Font dan Ikon -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    
+    <title>Generator Skrip Video Kompleks Kocak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --primary-color-start: #667eea;
-            --primary-color-end: #764ba2;
-            --secondary-color: #f0f2f5;
-            --text-color: #2c3e50;
-            --label-color: #576b81;
-            --border-color: #dce4f0;
-            --white-color: #ffffff;
-            --success-color: #2ecc71;
-            --success-gradient: linear-gradient(135deg, #2ecc71 0%, #28b463 100%);
-            --error-color: #e74c3c;
+        body {
+            font-family: 'Inter', sans-serif;
         }
-
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--secondary-color);
-            background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .container {
-            background-color: var(--white-color);
-            padding: 35px 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 550px;
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
         }
-
-        h1 {
-            color: var(--text-color);
-            margin-bottom: 30px;
-            font-size: 1.8em;
-            font-weight: 700;
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
         }
-        
-        h1 .ai-badge {
-            font-size: 0.5em;
-            font-weight: 600;
-            background: var(--primary-gradient);
-            color: var(--white-color);
-            padding: 4px 8px;
-            border-radius: 8px;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-
-        .input-group {
-            margin-bottom: 22px;
-            position: relative;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--label-color);
-            font-size: 0.9em;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i.fa-solid {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #bdc3c7;
-            font-size: 1.1em;
-            z-index: 1;
-            transition: color 0.3s;
-        }
-        
-        .input-wrapper.select-wrapper::after {
-            content: '\f078';
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #bdc3c7;
-            pointer-events: none;
-        }
-
-        input[type="text"], select, textarea {
-            width: 100%;
-            padding: 14px 20px 14px 50px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 1em;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease-in-out;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-color: #fdfdfd;
-        }
-        
-        input[type="text"]:focus, select:focus, textarea:focus {
-            border-color: var(--primary-color-start);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
-            outline: none;
-            background-color: var(--white-color);
-        }
-
-        input[type="text"]:focus ~ i, select:focus ~ i {
-             color: var(--primary-color-start);
-        }
-        
-        textarea {
-            height: 250px;
-            resize: vertical;
-            padding: 15px 20px;
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.05em;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        button:active:not(:disabled) {
-            transform: translateY(-1px);
-        }
-
-        #generateBtn {
-            background: var(--primary-gradient);
-            color: var(--white-color);
-        }
-
-        #copyBtn {
-            background-color: #e9ecef;
-            color: #495057;
-            border: 2px solid transparent;
-        }
-
-        #copyBtn:hover:not(:disabled) {
-             border-color: #dce1e6;
-        }
-        
-        button:disabled {
-            background-color: #f8f9fa;
-            color: #adb5bd;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-            opacity: 0.7;
-        }
-        
-        #copyBtn.copied {
-            background: var(--success-gradient);
-            color: var(--white-color);
-            border-color: transparent;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #95a5a6;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <div class="container">
-        <h1>Generator Pesan<span class="ai-badge">AI</span></h1>
-        
-        <div class="input-group">
-            <label for="namaPembeli">Nama Pembeli</label>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="namaPembeli" placeholder="Contoh: Kak Maria">
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <label for="namaProduk">Pilih Produk</label>
-            <div class="input-wrapper select-wrapper">
-                <i class="fa-solid fa-box-open"></i>
-                <select id="namaProduk">
-                    <option value="Buku Tulis Custem">Buku Tulis Custem</option>
-                    <option value="Fotopolaroid ukuran 6x9">Fotopolaroid ukuran 6x9</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="button-group">
-            <button id="generateBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Buat Pesan</button>
-            <button id="copyBtn" disabled><i class="fa-solid fa-copy"></i> Salin Pesan</button>
-        </div>
-        
-        <div class="input-group" style="margin-top: 25px;">
-            <label for="hasilPesan">Hasil Pesan (Format WhatsApp)</label>
-            <textarea id="hasilPesan" readonly placeholder="Hasil pesan dari AI akan muncul di sini..."></textarea>
-        </div>
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600 dark:text-indigo-400">Generator Skrip Video Kocak .AI</h1>
+            <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">Bikin skrip video paling gokil dari ko pu kompleks!</p>
+        </header>
 
-        <div class="footer">
-            Dibuat untuk CR-Kreatif Nabire
-        </div>
+        <main>
+            <!-- Input Form -->
+            <div id="form-container" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
+                <form id="story-form">
+                    <!-- Character Inputs -->
+                    <div class="mb-6">
+                        <label class="block text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Pemain di Kompleks</label>
+                        <div id="character-inputs" class="space-y-3">
+                            <!-- Initial character input -->
+                            <div class="flex items-center space-x-2">
+                                <input type="text" name="character" class="character-input w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="Contoh: Pace Yoris si tukang palak">
+                                <button type="button" class="remove-character-btn hidden text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors">&times;</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-character-btn" class="mt-3 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">+ Tambah Pemain</button>
+                    </div>
+
+                    <!-- Genre Selection -->
+                    <div class="mb-6">
+                        <label for="genre" class="block text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Pilih Model Cerita Kocak</label>
+                        <select id="genre" class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                            <option value="Drama Kompleks">Drama Kompleks</option>
+                            <option value="Salah Paham">Salah Paham</option>
+                            <option value="Acara 17-an Kacau">Acara 17-an Kacau</option>
+                            <option value="Mop Lucu">Mop Lucu</option>
+                            <option value="Horor Komedi">Horor Komedi</option>
+                            <option value="Rebutan Warisan">Rebutan Warisan</option>
+                        </select>
+                    </div>
+
+                    <!-- Synopsis Input -->
+                    <div class="mb-6">
+                        <label for="synopsis" class="block text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Ide Cerita (Bibit Masalah)</label>
+                        <textarea id="synopsis" rows="5" class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="Contoh: Ayam jago kesayangan milik ketua RT hilang, semua warga saling tuduh sampai baku pukul. Ternyata ayamnya cuma pergi cari betina di kompleks sebelah."></textarea>
+                    </div>
+                    
+                    <!-- Generate Button -->
+                    <div class="text-center">
+                        <button type="submit" id="generate-btn" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300">
+                            Bikin Rusuh!
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden text-center my-10">
+                <div class="inline-flex items-center space-x-3">
+                    <svg class="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-lg font-medium text-gray-600 dark:text-gray-400">AI lagi godok skrip... Tunggu dulu e!</span>
+                </div>
+            </div>
+            
+            <!-- Result Display -->
+            <div id="result-container" class="hidden mt-10 bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg fade-in">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">Ini Dia Ko Pu Skrip!</h2>
+                <div id="story-output" class="prose prose-lg dark:prose-invert max-w-none text-justify leading-relaxed whitespace-pre-wrap">
+                    <!-- Generated script will appear here -->
+                </div>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button id="copy-btn" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">Salin Skrip</button>
+                    <!-- New Download PDF Button -->
+                    <button id="download-btn" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">Unduh PDF</button>
+                    <button id="reset-btn" class="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">Bikin Lagi!</button>
+                </div>
+                <div id="copy-feedback" class="text-center mt-3 text-green-600 dark:text-green-400 font-medium hidden">Skrip berhasil disalin!</div>
+            </div>
+
+            <!-- Error Message Box -->
+            <div id="error-box" class="hidden mt-6 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-500 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative" role="alert">
+                <strong class="font-bold">Aduh!</strong>
+                <span id="error-message" class="block sm:inline"></span>
+            </div>
+
+        </main>
     </div>
 
-    <script>
-        const namaPembeliInput = document.getElementById('namaPembeli');
-        const namaProdukInput = document.getElementById('namaProduk');
-        const generateBtn = document.getElementById('generateBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const hasilTextarea = document.getElementById('hasilPesan');
+    <script type="module">
+        // --- Global namespace for jsPDF ---
+        const { jsPDF } = window.jspdf;
 
-        async function generateMessage() {
-            const namaPembeli = namaPembeliInput.value;
-            const namaProduk = namaProdukInput.value;
+        // --- DOM Element Selection ---
+        const storyForm = document.getElementById('story-form');
+        const characterInputsContainer = document.getElementById('character-inputs');
+        const addCharacterBtn = document.getElementById('add-character-btn');
+        const genreSelect = document.getElementById('genre');
+        const synopsisInput = document.getElementById('synopsis');
+        const generateBtn = document.getElementById('generate-btn');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultContainer = document.getElementById('result-container');
+        const storyOutput = document.getElementById('story-output');
+        const copyBtn = document.getElementById('copy-btn');
+        const downloadBtn = document.getElementById('download-btn'); // New button
+        const resetBtn = document.getElementById('reset-btn');
+        const copyFeedback = document.getElementById('copy-feedback');
+        const errorBox = document.getElementById('error-box');
+        const errorMessage = document.getElementById('error-message');
+        const formContainer = document.getElementById('form-container');
 
-            // --- API Key Anda sudah dimasukkan ---
-            const apiKey = "AIzaSyC8G0aM_-qZzqJtwMLK-SUq4uFIUSG37Hw"; 
+        // --- Event Listeners ---
+        addCharacterBtn.addEventListener('click', addCharacterField);
+        characterInputsContainer.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('remove-character-btn')) {
+                e.target.parentElement.remove();
+                updateRemoveButtons();
+            }
+        });
+        storyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await generateStory();
+        });
+        copyBtn.addEventListener('click', copyStoryToClipboard);
+        downloadBtn.addEventListener('click', downloadAsPDF); // New listener
+        resetBtn.addEventListener('click', resetForm);
 
-            if (apiKey === "MASUKKAN_API_KEY_ANDA_DI_SINI") {
-                hasilTextarea.value = "Kesalahan: API Key belum dimasukkan. Harap edit file HTML dan masukkan API Key Anda.";
+        // --- Functions ---
+        function addCharacterField() {
+            const div = document.createElement('div');
+            div.className = 'flex items-center space-x-2 fade-in';
+            div.innerHTML = `
+                <input type="text" name="character" class="character-input w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" placeholder="Pemain lainnya">
+                <button type="button" class="remove-character-btn text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors text-2xl font-bold leading-none">&times;</button>
+            `;
+            characterInputsContainer.appendChild(div);
+            updateRemoveButtons();
+        }
+
+        function updateRemoveButtons() {
+            const allRemoveButtons = document.querySelectorAll('.remove-character-btn');
+            allRemoveButtons.forEach((btn, index) => {
+                btn.classList.toggle('hidden', allRemoveButtons.length === 1);
+            });
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorBox.classList.remove('hidden');
+            setTimeout(() => {
+                errorBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        async function generateStory() {
+            hideError();
+            const characterInputs = document.querySelectorAll('.character-input');
+            const characters = Array.from(characterInputs)
+                .map(input => input.value.trim())
+                .filter(name => name !== '');
+
+            const synopsis = synopsisInput.value.trim();
+            const genre = genreSelect.value;
+
+            if (characters.length === 0) {
+                showError('Isi dulu nama pemainnya, bos.');
+                return;
+            }
+            if (synopsis === '') {
+                showError('Kasih bibit masalahnya dulu, baru kita bikin ribut.');
                 return;
             }
 
-            if (namaPembeli.trim() === '') {
-                hasilTextarea.value = "Harap isi Nama Pembeli terlebih dahulu.";
-                return;
-            }
-
+            formContainer.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
             generateBtn.disabled = true;
-            copyBtn.disabled = true;
-            const originalBtnText = generateBtn.innerHTML;
-            generateBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Membuat...`;
-            hasilTextarea.value = "AI sedang merangkai kata-kata terbaik untuk Anda...";
-            
-            const prompt = `Anda adalah asisten pemasaran yang ramah untuk "CR- Kreatif Nabire", sebuah usaha percetakan lokal di Nabire, Papua. Tugas Anda adalah membuat sebuah pesan WhatsApp yang hangat dan personal untuk meminta testimoni dari pelanggan. Informasi Pelanggan: - Nama Pelanggan: ${namaPembeli} - Produk yang dibeli: ${namaProduk}. Instruksi: 1. Sapa pelanggan dengan namanya. 2. Sebutkan nama brand "CR- Kreatif Nabire" dan produk yang dibeli. 3. Gunakan gaya bahasa yang tulus, bersahabat, dan tidak kaku. 4. Tekankan bahwa ulasan mereka sangat berarti dan bisa membantu orang lain di Nabire menemukan tempat cetak yang bagus. 5. Minta izin untuk menampilkan testimoni mereka. 6. Gunakan format tebal WhatsApp (tanda bintang *) pada nama pelanggan, nama brand, nama produk, dan lokasi (Nabire). 7. Akhiri dengan ucapan terima kasih dan emoji yang sesuai. 8. Hanya berikan teks pesannya saja, tanpa kalimat pembuka atau penutup tambahan dari Anda.`;
+            generateBtn.textContent = 'Sabar e...';
+
+            const prompt = `
+                Anda adalah seorang penulis skenario video pendek komedi yang sangat mahir dalam budaya dan bahasa gaul Papua. Latar ceritanya adalah sebuah kompleks perumahan yang selalu heboh dan penuh masalah lucu.
+
+                **TUGAS UTAMA:** Buat sebuah SKRIP VIDEO PENDEK (durasi sekitar 1-3 menit) yang SANGAT KOCAK, KONYOL, dan 'KOMPLEKS'. Fokus pada situasi lucu, salah paham, dialog yang bikin tertawa, dan karakter yang unik.
+
+                **WAJIB:** Gunakan gaya bahasa dan logat khas Papua secara total (sapaan "pace", "mace", kata "sa", "ko", "dong", "tra", "bikin", "ioo", "awaskoo", dll).
+
+                **FORMAT SKRIP (HARUS DIIKUTI):**
+                -   **JUDUL SKRIP:** (Buatkan judul yang paling gokil dan provokatif)
+                -   **SCENE HEADING:** Tulis dengan format: INT./EXT. NAMA LOKASI - WAKTU (PAGI/SIANG/MALAM). Contoh: EXT. DEPAN RUMAH PAK RT - SIANG.
+                -   **DESKRIPSI AKSI:** Jelaskan apa yang terjadi di scene itu dengan singkat.
+                -   **NAMA KARAKTER:** Tulis di tengah dengan huruf kapital.
+                -   **DIALOG:** Tulis di bawah nama karakter.
+                -   **EKSPRESI/AKSI KECIL:** Tulis (dalam kurung) di bawah nama karakter jika perlu.
+
+                ---
+                **INFORMASI DARI PENGGUNA:**
+
+                **Genre Komedi:** ${genre}
+
+                **Pemain Utama:** ${characters.join(', ')}
+
+                **Bibit Masalah (Sinopsis):**
+                ${synopsis}
+                ---
+
+                **CONTOH FORMAT:**
+
+                **JUDUL: AYAM JAGO BIKIN PUSING**
+
+                **SCENE 1**
+
+                EXT. HALAMAN RUMAH PAK RT - PAGI
+
+                PACE YORIS (salah satu pemain) lari-lari sambil berteriak panik. MACE AGNES (pemain lain) sedang siram bunga, kaget sampai selang air terlepas.
+
+                PACE YORIS
+                Aduhh! Mace! Gawat ini! Gawat!
+
+                MACE AGNES
+                (sambil pegang dada)
+                Heh! Ko bikin sa jantungan saja! Ada apa kah?!
+
+                ---
+                **Mulai skrip Anda di bawah ini berdasarkan informasi pengguna.**
+            `;
 
             try {
+                const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -301,50 +275,109 @@
                 if (!response.ok) {
                     const errorData = await response.json();
                     console.error("API Error:", errorData);
-                    let errorMessage = `API request failed with status ${response.status}.`;
-                    if (errorData.error && errorData.error.message) {
-                       errorMessage += ` Pesan: ${errorData.error.message}. Pastikan API Key Anda benar dan aktif.`;
-                    }
-                    throw new Error(errorMessage);
+                    throw new Error(`API request failed with status ${response.status}. ${errorData.error?.message || ''}`);
                 }
 
                 const result = await response.json();
                 
-                if (result.candidates && result.candidates.length > 0) {
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    
                     const generatedText = result.candidates[0].content.parts[0].text;
-                    hasilTextarea.value = generatedText.trim();
-                    copyBtn.disabled = false;
+                    storyOutput.textContent = generatedText;
+                    
+                    loadingIndicator.classList.add('hidden');
+                    resultContainer.classList.remove('hidden');
+
                 } else {
-                    throw new Error("Respons dari AI tidak valid atau kosong.");
+                    console.error("Invalid AI Response:", result);
+                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].finishReason) {
+                         throw new Error(`Skrip tra bisa dibuat. Alasan: ${result.candidates[0].finishReason}`);
+                    }
+                    throw new Error("Respon dari AI kosong, mungkin dia lagi pusing.");
                 }
 
             } catch (error) {
-                console.error("Error:", error);
-                hasilTextarea.value = `Maaf, terjadi kesalahan: ${error.message}`;
+                console.error('Error generating story:', error);
+                showError(`Ada masalah: ${error.message}. Coba lagi nanti.`);
+                loadingIndicator.classList.add('hidden');
+                formContainer.classList.remove('hidden');
             } finally {
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = originalBtnText;
+                generateBtn.textContent = 'Bikin Rusuh!';
             }
         }
+        
+        function hideError() {
+            errorBox.classList.add('hidden');
+        }
 
-        function copyMessage() {
-            hasilTextarea.select();
-            hasilTextarea.setSelectionRange(0, 99999);
+        function copyStoryToClipboard() {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = storyOutput.textContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
             document.execCommand('copy');
-            
-            const originalCopyBtnText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin!';
-            copyBtn.classList.add('copied');
+            document.body.removeChild(tempTextArea);
 
+            copyFeedback.textContent = 'Skrip berhasil disalin!';
+            copyFeedback.classList.remove('hidden');
             setTimeout(() => {
-                copyBtn.innerHTML = originalCopyBtnText;
-                copyBtn.classList.remove('copied');
+                copyFeedback.classList.add('hidden');
             }, 2000);
         }
 
-        generateBtn.addEventListener('click', generateMessage);
-        copyBtn.addEventListener('click', copyMessage);
-    </script>
+        /**
+         * New function to download the script as a PDF file.
+         */
+        function downloadAsPDF() {
+            const doc = new jsPDF();
+            const scriptText = storyOutput.textContent;
+            
+            // Define margins and line height
+            const margin = 15;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            let y = margin; // Initial y position
 
+            // Set font size
+            doc.setFontSize(12);
+
+            // Split the text into lines that fit the page width
+            const lines = doc.splitTextToSize(scriptText, pageWidth - margin * 2);
+
+            // Process each line
+            lines.forEach(line => {
+                // Check if there is enough space for the next line
+                if (y + lineHeight > pageHeight - margin) {
+                    doc.addPage(); // Add a new page
+                    y = margin; // Reset y position
+                }
+
+                // Add text to the PDF
+                doc.text(line, margin, y);
+                y += lineHeight; // Move to the next line
+            });
+
+            // Save the PDF
+            doc.save('skrip-kocak.pdf');
+        }
+
+        function resetForm() {
+            resultContainer.classList.add('hidden');
+            formContainer.classList.remove('hidden');
+            storyForm.reset();
+            storyOutput.textContent = '';
+            
+            const extraFields = document.querySelectorAll('#character-inputs .flex:not(:first-child)');
+            extraFields.forEach(field => field.remove());
+            updateRemoveButtons();
+            hideError();
+        }
+
+        updateRemoveButtons();
+    </script>
 </body>
 </html>
