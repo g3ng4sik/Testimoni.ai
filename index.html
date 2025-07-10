@@ -266,46 +266,31 @@
             const namaPembeli = namaPembeliInput.value;
             const namaProduk = namaProdukInput.value;
 
+            // --- API Key Anda sudah dimasukkan ---
+            const apiKey = "AIzaSyC8G0aM_-qZzqJtwMLK-SUq4uFIUSG37Hw"; 
+
+            if (apiKey === "MASUKKAN_API_KEY_ANDA_DI_SINI") {
+                hasilTextarea.value = "Kesalahan: API Key belum dimasukkan. Harap edit file HTML dan masukkan API Key Anda.";
+                return;
+            }
+
             if (namaPembeli.trim() === '') {
                 hasilTextarea.value = "Harap isi Nama Pembeli terlebih dahulu.";
                 return;
             }
 
-            // --- UI Loading State ---
             generateBtn.disabled = true;
             copyBtn.disabled = true;
             const originalBtnText = generateBtn.innerHTML;
             generateBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Membuat...`;
             hasilTextarea.value = "AI sedang merangkai kata-kata terbaik untuk Anda...";
             
-            // --- AI Prompting ---
-            const prompt = `Anda adalah asisten pemasaran yang ramah untuk "CR- Kreatif Nabire", sebuah usaha percetakan lokal di Nabire, Papua. Tugas Anda adalah membuat sebuah pesan WhatsApp yang hangat dan personal untuk meminta testimoni dari pelanggan.
-
-            Informasi Pelanggan:
-            - Nama Pelanggan: ${namaPembeli}
-            - Produk yang dibeli: ${namaProduk}
-
-            Instruksi:
-            1.  Sapa pelanggan dengan namanya.
-            2.  Sebutkan nama brand "CR- Kreatif Nabire" dan produk yang dibeli.
-            3.  Gunakan gaya bahasa yang tulus, bersahabat, dan tidak kaku.
-            4.  Tekankan bahwa ulasan mereka sangat berarti dan bisa membantu orang lain di Nabire menemukan tempat cetak yang bagus.
-            5.  Minta izin untuk menampilkan testimoni mereka.
-            6.  Gunakan format tebal WhatsApp (tanda bintang *) pada nama pelanggan, nama brand, nama produk, dan lokasi (Nabire).
-            7.  Akhiri dengan ucapan terima kasih dan emoji yang sesuai.
-            8.  Hanya berikan teks pesannya saja, tanpa kalimat pembuka atau penutup tambahan dari Anda.`;
+            const prompt = `Anda adalah asisten pemasaran yang ramah untuk "CR- Kreatif Nabire", sebuah usaha percetakan lokal di Nabire, Papua. Tugas Anda adalah membuat sebuah pesan WhatsApp yang hangat dan personal untuk meminta testimoni dari pelanggan. Informasi Pelanggan: - Nama Pelanggan: ${namaPembeli} - Produk yang dibeli: ${namaProduk}. Instruksi: 1. Sapa pelanggan dengan namanya. 2. Sebutkan nama brand "CR- Kreatif Nabire" dan produk yang dibeli. 3. Gunakan gaya bahasa yang tulus, bersahabat, dan tidak kaku. 4. Tekankan bahwa ulasan mereka sangat berarti dan bisa membantu orang lain di Nabire menemukan tempat cetak yang bagus. 5. Minta izin untuk menampilkan testimoni mereka. 6. Gunakan format tebal WhatsApp (tanda bintang *) pada nama pelanggan, nama brand, nama produk, dan lokasi (Nabire). 7. Akhiri dengan ucapan terima kasih dan emoji yang sesuai. 8. Hanya berikan teks pesannya saja, tanpa kalimat pembuka atau penutup tambahan dari Anda.`;
 
             try {
-                // --- Gemini API Call ---
-                const apiKey = ""; // Dibiarkan kosong sesuai instruksi
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
-                const payload = {
-                    contents: [{
-                        role: "user",
-                        parts: [{ text: prompt }]
-                    }]
-                };
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -314,7 +299,13 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API request failed with status ${response.status}`);
+                    const errorData = await response.json();
+                    console.error("API Error:", errorData);
+                    let errorMessage = `API request failed with status ${response.status}.`;
+                    if (errorData.error && errorData.error.message) {
+                       errorMessage += ` Pesan: ${errorData.error.message}. Pastikan API Key Anda benar dan aktif.`;
+                    }
+                    throw new Error(errorMessage);
                 }
 
                 const result = await response.json();
@@ -324,14 +315,13 @@
                     hasilTextarea.value = generatedText.trim();
                     copyBtn.disabled = false;
                 } else {
-                    throw new Error("Respons dari AI tidak valid.");
+                    throw new Error("Respons dari AI tidak valid atau kosong.");
                 }
 
             } catch (error) {
                 console.error("Error:", error);
-                hasilTextarea.value = "Maaf, terjadi kesalahan saat membuat pesan. Silakan coba lagi beberapa saat.";
+                hasilTextarea.value = `Maaf, terjadi kesalahan: ${error.message}`;
             } finally {
-                // --- Reset UI State ---
                 generateBtn.disabled = false;
                 generateBtn.innerHTML = originalBtnText;
             }
